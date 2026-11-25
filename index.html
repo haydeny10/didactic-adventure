@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Habit Pet</title>
+  <meta name="description" content="Keep your habits and your pet grows. Skip them and it gets sick.">
+  <meta name="theme-color" content="#7c5cff">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Habit Pet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <!-- Hatch screen: shown when there is no pet yet -->
+    <section id="hatch-screen" class="card hidden">
+      <h1>Habit Pet</h1>
+      <p class="muted">Every habit you finish helps your pet grow. If you skip your habits, it gets sick, and after a few bad days it dies.</p>
+      <div class="pet-stage small" id="hatch-egg"></div>
+      <form id="hatch-form" class="row">
+        <input id="hatch-name" maxlength="16" placeholder="Name your pet" required autocomplete="off">
+        <button type="submit" class="primary">Hatch</button>
+      </form>
+    </section>
+
+    <!-- Main screen -->
+    <section id="pet-screen" class="hidden">
+      <header class="pet-header">
+        <div>
+          <h1 id="pet-name">Pet</h1>
+          <p class="muted" id="pet-sub">Egg · Day 1</p>
+        </div>
+        <div class="streak" title="Perfect days in a row">🔥 <span id="streak">0</span></div>
+      </header>
+
+      <div class="card pet-card">
+        <div class="pet-stage" id="pet-stage" aria-label="Your pet"></div>
+        <p class="speech" id="speech">Hi!</p>
+
+        <div class="meter">
+          <div class="meter-label"><span>❤️ Health</span><span id="health-text">100</span></div>
+          <div class="bar"><div class="fill health" id="health-bar"></div></div>
+        </div>
+        <div class="meter">
+          <div class="meter-label"><span>⭐ Growth</span><span id="xp-text">0 / 30</span></div>
+          <div class="bar"><div class="fill xp" id="xp-bar"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <h2>Today's habits</h2>
+          <span class="muted" id="today-count">0 / 0</span>
+        </div>
+        <ul id="habit-list" class="habit-list"></ul>
+        <p id="no-habits" class="muted hidden">Add your first habit below. Your pet is counting on you!</p>
+        <form id="habit-form" class="row">
+          <input id="habit-emoji" class="emoji-input" maxlength="2" placeholder="💧" autocomplete="off" aria-label="Emoji">
+          <input id="habit-name" maxlength="40" placeholder="New habit, e.g. Drink water" required autocomplete="off">
+          <button type="submit" class="primary" aria-label="Add habit">+</button>
+        </form>
+      </div>
+
+      <details class="card graveyard" id="graveyard-box">
+        <summary>🪦 Pet graveyard (<span id="grave-count">0</span>)</summary>
+        <ul id="graveyard" class="grave-list"></ul>
+      </details>
+    </section>
+
+    <!-- Death screen -->
+    <section id="dead-screen" class="card hidden">
+      <div class="pet-stage" id="dead-stage"></div>
+      <h1 id="dead-title">Your pet died</h1>
+      <p class="muted" id="dead-text"></p>
+      <button class="primary" id="restart-btn">Hatch a new egg</button>
+    </section>
+  </main>
+
+  <!-- Pop-up for evolutions and warnings -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="pet-stage small" id="modal-pet"></div>
+      <h2 id="modal-title"></h2>
+      <p id="modal-text" class="muted"></p>
+      <button class="primary" id="modal-ok">Yay!</button>
+    </div>
+  </div>
+
+  <script src="pet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
