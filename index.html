@@ -15,79 +15,195 @@
 </head>
 <body>
   <main class="app">
-    <!-- Hatch screen: shown when there is no pet yet -->
+
+    <!-- ===== Hatch a new pet ===== -->
     <section id="hatch-screen" class="card hidden">
       <h1>Habit Pet</h1>
-      <p class="muted">Every habit you finish helps your pet grow. If you skip your habits, it gets sick, and after a few bad days it dies.</p>
-      <div class="pet-stage small" id="hatch-egg"></div>
+      <p class="muted">Every habit you finish helps your pet grow. Skip your habits and it gets sick, and after a few bad days it dies.</p>
+      <div class="pet-stage small mood-egg" id="hatch-preview"></div>
+      <h3>Choose a pet</h3>
+      <div class="chip-row" id="type-picker"></div>
+      <h3>Choose a colour</h3>
+      <div class="chip-row" id="colour-picker"></div>
       <form id="hatch-form" class="row">
         <input id="hatch-name" maxlength="16" placeholder="Name your pet" required autocomplete="off">
         <button type="submit" class="primary">Hatch</button>
       </form>
     </section>
 
-    <!-- Main screen -->
-    <section id="pet-screen" class="hidden">
-      <header class="pet-header">
-        <div>
-          <h1 id="pet-name">Pet</h1>
-          <p class="muted" id="pet-sub">Egg · Day 1</p>
-        </div>
-        <div class="streak" title="Perfect days in a row">🔥 <span id="streak">0</span></div>
-      </header>
-
-      <div class="card pet-card">
-        <div class="pet-stage" id="pet-stage" aria-label="Your pet"></div>
-        <p class="speech" id="speech">Hi!</p>
-
-        <div class="meter">
-          <div class="meter-label"><span>❤️ Health</span><span id="health-text">100</span></div>
-          <div class="bar"><div class="fill health" id="health-bar"></div></div>
-        </div>
-        <div class="meter">
-          <div class="meter-label"><span>⭐ Growth</span><span id="xp-text">0 / 30</span></div>
-          <div class="bar"><div class="fill xp" id="xp-bar"></div></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <h2>Today's habits</h2>
-          <span class="muted" id="today-count">0 / 0</span>
-        </div>
-        <ul id="habit-list" class="habit-list"></ul>
-        <p id="no-habits" class="muted hidden">Add your first habit below. Your pet is counting on you!</p>
-        <form id="habit-form" class="row">
-          <input id="habit-emoji" class="emoji-input" maxlength="2" placeholder="💧" autocomplete="off" aria-label="Emoji">
-          <input id="habit-name" maxlength="40" placeholder="New habit, e.g. Drink water" required autocomplete="off">
-          <button type="submit" class="primary" aria-label="Add habit">+</button>
-        </form>
-      </div>
-
-      <details class="card graveyard" id="graveyard-box">
-        <summary>🪦 Pet graveyard (<span id="grave-count">0</span>)</summary>
-        <ul id="graveyard" class="grave-list"></ul>
-      </details>
-    </section>
-
-    <!-- Death screen -->
+    <!-- ===== Pet died ===== -->
     <section id="dead-screen" class="card hidden">
       <div class="pet-stage" id="dead-stage"></div>
       <h1 id="dead-title">Your pet died</h1>
       <p class="muted" id="dead-text"></p>
       <button class="primary" id="restart-btn">Hatch a new egg</button>
     </section>
+
+    <!-- ===== The game ===== -->
+    <section id="game" class="hidden">
+      <header class="pet-header">
+        <div>
+          <h1 id="pet-name">Pet</h1>
+          <p class="muted" id="pet-sub">Egg · Day 1</p>
+        </div>
+        <div class="pills">
+          <div class="pill" title="Coins">🪙 <span id="coins">0</span></div>
+          <div class="pill" title="Perfect days in a row">🔥 <span id="streak">0</span></div>
+        </div>
+      </header>
+
+      <!-- Home tab -->
+      <div class="tab" id="tab-home">
+        <div class="card pet-card">
+          <div class="scene" id="scene" aria-label="Your pet's room"></div>
+          <p class="speech" id="speech">Hi!</p>
+          <div class="meter">
+            <div class="meter-label"><span>❤️ Health</span><span id="health-text">100</span></div>
+            <div class="bar"><div class="fill health" id="health-bar"></div></div>
+          </div>
+          <div class="meter">
+            <div class="meter-label"><span>⭐ Growth</span><span id="xp-text">0 / 30</span></div>
+            <div class="bar"><div class="fill xp" id="xp-bar"></div></div>
+          </div>
+          <button class="ghost share-btn" id="share-btn">📸 Share a picture</button>
+        </div>
+
+        <div class="card rescue hidden" id="rescue-banner">
+          <strong>🚨 Rescue mission!</strong>
+          <p id="rescue-text">Finish every habit today to save your pet.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <h2 id="today-title">Today</h2>
+            <span class="muted" id="today-count">0 / 0</span>
+          </div>
+          <ul id="habit-list" class="habit-list"></ul>
+          <p id="no-habits" class="muted hidden">Nothing to do today. Add a habit and your pet will cheer you on!</p>
+          <p id="not-today" class="muted small hidden"></p>
+          <p class="muted small" id="pass-status"></p>
+          <button class="primary wide" id="add-habit-btn">+ Add a habit</button>
+        </div>
+
+        <details class="card graveyard" id="graveyard-box">
+          <summary>🪦 Pet graveyard (<span id="grave-count">0</span>)</summary>
+          <ul id="graveyard" class="grave-list"></ul>
+        </details>
+      </div>
+
+      <!-- Shop tab -->
+      <div class="tab hidden" id="tab-shop">
+        <div class="card">
+          <h2>👒 Outfits</h2>
+          <p class="muted small">New outfits unlock as your pets grow up.</p>
+          <div class="shop-grid" id="shop-hats"></div>
+        </div>
+        <div class="card">
+          <h2>🛋️ Room</h2>
+          <p class="muted small">Decorate your pet's room. Tap an item you own to put it out or put it away.</p>
+          <div class="shop-grid" id="shop-furniture"></div>
+        </div>
+        <div class="card">
+          <h2>🎨 Wallpaper</h2>
+          <div class="shop-grid" id="shop-walls"></div>
+        </div>
+      </div>
+
+      <!-- Badges tab -->
+      <div class="tab hidden" id="tab-badges">
+        <div class="card">
+          <div class="card-title">
+            <h2>🏆 Badges</h2>
+            <span class="muted" id="badge-count">0 / 0</span>
+          </div>
+          <div class="badge-grid" id="badge-grid"></div>
+        </div>
+      </div>
+
+      <!-- Stats tab -->
+      <div class="tab hidden" id="tab-stats">
+        <div class="card">
+          <h2>📅 Last 5 weeks</h2>
+          <div class="calendar" id="calendar"></div>
+          <div class="legend">
+            <span><i class="c-perfect"></i>All done</span>
+            <span><i class="c-partial"></i>Some</span>
+            <span><i class="c-fail"></i>Missed</span>
+            <span><i class="c-pass"></i>Sick-day pass</span>
+          </div>
+        </div>
+        <div class="card">
+          <h2>📊 Your numbers</h2>
+          <div class="stat-grid" id="stat-grid"></div>
+        </div>
+        <div class="card">
+          <h2>🔔 Reminders</h2>
+          <p class="muted small">Get a nudge if your habits aren't done by this time. Phones only show reminders while the app is still open in the background, so it's worth checking in yourself too.</p>
+          <div class="row">
+            <input type="time" id="remind-time" value="19:00">
+            <button class="primary" id="remind-btn">Turn on</button>
+          </div>
+          <p class="muted small" id="remind-status"></p>
+        </div>
+        <div class="card">
+          <h2>⚙️ More</h2>
+          <button class="ghost danger" id="reset-btn">Start over (deletes everything)</button>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Pop-up for evolutions and warnings -->
+  <nav class="tabbar hidden" id="tabbar">
+    <button data-tab="home" class="active"><span>🏠</span>Home</button>
+    <button data-tab="shop"><span>🛍️</span>Shop</button>
+    <button data-tab="badges"><span>🏆</span>Badges</button>
+    <button data-tab="stats"><span>📊</span>Stats</button>
+  </nav>
+
+  <!-- Pop-up message -->
   <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-box">
       <div class="pet-stage small" id="modal-pet"></div>
       <h2 id="modal-title"></h2>
       <p id="modal-text" class="muted"></p>
-      <button class="primary" id="modal-ok">Yay!</button>
+      <button class="primary wide" id="modal-ok">Yay!</button>
     </div>
   </div>
+
+  <!-- Add / edit habit -->
+  <div id="habit-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <form class="modal-box form" id="habit-form">
+      <h2 id="habit-form-title">New habit</h2>
+      <div class="row">
+        <input id="hf-emoji" class="emoji-input" maxlength="8" placeholder="💧" autocomplete="off" aria-label="Emoji">
+        <input id="hf-name" maxlength="40" placeholder="e.g. Drink water" required autocomplete="off" aria-label="Habit name">
+      </div>
+
+      <label class="field-label">How hard is it?</label>
+      <div class="seg" id="hf-difficulty">
+        <button type="button" data-v="easy">Easy</button>
+        <button type="button" data-v="medium">Medium</button>
+        <button type="button" data-v="hard">Hard</button>
+      </div>
+      <p class="muted small" id="hf-reward"></p>
+
+      <label class="field-label">Which days?</label>
+      <div class="days" id="hf-days"></div>
+
+      <label class="field-label" for="hf-target">How many times a day?</label>
+      <div class="stepper">
+        <button type="button" id="hf-minus">−</button>
+        <input id="hf-target" type="number" min="1" max="20" value="1">
+        <button type="button" id="hf-plus">+</button>
+      </div>
+
+      <button type="submit" class="primary wide">Save</button>
+      <button type="button" class="ghost wide" id="hf-cancel">Cancel</button>
+      <button type="button" class="ghost danger wide hidden" id="hf-delete">Delete habit</button>
+    </form>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
 
   <script src="pet.js"></script>
   <script src="app.js"></script>

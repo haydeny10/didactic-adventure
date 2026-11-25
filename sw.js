@@ -1,5 +1,5 @@
 // Lets the app open offline once it has been visited.
-const CACHE = "habitpet-v1";
+const CACHE = "habitpet-v2";
 const FILES = ["./", "index.html", "style.css", "pet.js", "app.js", "manifest.json", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png"];
 
 self.addEventListener("install", e => {
@@ -24,5 +24,16 @@ self.addEventListener("fetch", e => {
         return res;
       })
       .catch(() => caches.match(e.request))
+  );
+});
+
+// Tapping a reminder opens the app.
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  e.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(list => {
+      for (const c of list) if ("focus" in c) return c.focus();
+      return self.clients.openWindow("./");
+    })
   );
 });
