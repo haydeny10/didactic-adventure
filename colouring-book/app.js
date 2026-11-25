@@ -652,20 +652,22 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) saveP
 
 async function shareCanvas(c, name) {
   const blob = await toBlob(c);
-  const file = new File([blob], name, { type: 'image/png' });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try { await navigator.share({ files: [file], title: 'My colouring page' }); return; }
-    catch (e) { if (e.name === 'AbortError') return; }
+  try {
+    const file = new File([blob], name, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: 'My colouring page' });
+      return;
+    }
+  } catch (e) {
+    if (e.name === 'AbortError') return;
   }
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = name;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-  toast('Picture saved');
+  // fallback: show the picture so it can be saved with press-and-hold (or right-click)
+  const img = $('#saveImg');
+  if (img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+  img.src = URL.createObjectURL(blob);
+  $('#saveView').hidden = false;
 }
+$('#saveClose').addEventListener('click', () => { $('#saveView').hidden = true; });
 
 /* ---------------- gallery ---------------- */
 async function renderGallery() {
@@ -687,8 +689,13 @@ async function renderGallery() {
     del.setAttribute('aria-label', 'Delete page');
     del.addEventListener('click', async (e) => {
       e.stopPropagation();
-      if (!confirm('Delete this page?')) return;
-      await DB.del(p.id);
+      if (!del.classList.contains('confirm')) {
+        del.classList.add('confirm');
+        del.textContent = 'Delete?';
+        setTimeout(() => { del.classList.remove('confirm'); del.textContent = '✕'; }, 3000);
+        return;
+      }
+      try { await DB.del(p.id); } catch (err) { /* ignore */ }
       renderGallery();
     });
     card.append(img, del);

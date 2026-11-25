@@ -9,14 +9,24 @@
   --stage: #efe6dc;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #1c1714;
     --card: #2a231e;
     --ink: #f6ece2;
     --muted: #b3a394;
     --line: #3d332c;
     --stage: #141110;
+    color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --bg: #1c1714;
+  --card: #2a231e;
+  --ink: #f6ece2;
+  --muted: #b3a394;
+  --line: #3d332c;
+  --stage: #141110;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; height: 100%; }
@@ -32,8 +42,7 @@ button { font: inherit; color: inherit; }
 .screen {
   display: none;
   flex-direction: column;
-  height: 100vh;
-  height: 100dvh;
+  height: 100%;
   padding-top: env(safe-area-inset-top);
 }
 .screen.active { display: flex; }
@@ -128,3 +137,16 @@ input[type=range] { accent-color: var(--accent); height: 32px; }
   opacity: 0; pointer-events: none; transition: .25s; max-width: calc(100% - 32px); text-align: center;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.overlay {
+  position: fixed; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background: rgba(20, 14, 10, .85); color: #fff; text-align: center;
+}
+.overlay[hidden] { display: none; }
+.overlay img {
+  max-width: 100%; max-height: 70%; border-radius: 10px; background: #fff;
+  -webkit-touch-callout: default; -webkit-user-select: auto; user-select: auto;
+}
+.overlay p { margin: 0; font-weight: 600; }
+.card .del.confirm { width: auto; padding: 0 12px; border-radius: 999px; background: #e63946; font-weight: 700; }
