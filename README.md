@@ -60,3 +60,7 @@ Your pet and habits are saved on your device, and the app works offline.
 - `pet.js`: draws the pets, outfits and room
 - `app.js`: the game rules, shop, badges, stats and reminders
 - `sw.js` + `manifest.json`: let it install like an app and work offline
+
+## Also in this repo
+
+- [`colouring-book/`](colouring-book/): **Colour My Photo**, turns your photos into colouring pages you can colour in on a phone or iPad.
