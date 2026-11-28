@@ -91,6 +91,21 @@
         </details>
       </div>
 
+      <!-- Play tab -->
+      <div class="tab hidden" id="tab-play">
+        <div class="card arcade-card">
+          <div class="arcade-wrap">
+            <canvas id="arcade-canvas" aria-label="Pet Patrol game"></canvas>
+            <div class="arcade-overlay hidden" id="arcade-overlay">
+              <h2 id="arcade-title">Pet Patrol</h2>
+              <p id="arcade-text"></p>
+              <button class="primary" id="arcade-go">Start</button>
+            </div>
+          </div>
+          <p class="muted small" id="arcade-info"></p>
+        </div>
+      </div>
+
       <!-- Shop tab -->
       <div class="tab hidden" id="tab-shop">
         <div class="card">
@@ -155,6 +170,7 @@
 
   <nav class="tabbar hidden" id="tabbar">
     <button data-tab="home" class="active"><span>🏠</span>Home</button>
+    <button data-tab="play"><span>🚀</span>Play</button>
     <button data-tab="shop"><span>🛍️</span>Shop</button>
     <button data-tab="badges"><span>🏆</span>Badges</button>
     <button data-tab="stats"><span>📊</span>Stats</button>
@@ -206,6 +222,7 @@
   <div id="toast" class="toast hidden"></div>
 
   <script src="pet.js"></script>
+  <script src="arcade.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

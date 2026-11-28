@@ -58,6 +58,7 @@ function freshState() {
     badges: {},
     stats: { habitsDone: 0, perfectDays: 0, bestStreak: 0, bestStage: 0, rescues: 0, petsHatched: 0 },
     graveyard: [],
+    arcade: { best: 0, bestWave: 0, day: null, coins: 0 },
     settings: { remindOn: false, remindTime: "19:00", lastReminded: null },
   };
 }
@@ -86,6 +87,7 @@ function migrate(s) {
   const out = Object.assign(base, s);
   out.stats = Object.assign(freshState().stats, base.stats, s.stats || {});
   out.settings = Object.assign(freshState().settings, s.settings || {});
+  out.arcade = Object.assign(freshState().arcade, s.arcade || {});
   return out;
 }
 
@@ -323,6 +325,7 @@ const BADGES = [
   { id: "comeback",  icon: "🌈", name: "Never give up", desc: "Hatch a new pet after losing one", coins: 10, test: s => s.graveyard.length >= 1 && s.pet && s.pet.alive },
   { id: "habits250", icon: "🏅", name: "Unstoppable",   desc: "Finish 250 habits",              coins: 40, test: s => s.stats.habitsDone >= 250 },
   { id: "streak30",  icon: "🌟", name: "Month of magic", desc: "Get a 30-day streak",           coins: 50, test: s => s.stats.bestStreak >= 30 },
+  { id: "patrol",    icon: "🚀", name: "Pet Patrol",    desc: "Reach wave 5 in Pet Patrol",     coins: 10, test: s => s.arcade && s.arcade.bestWave >= 5 },
   { id: "legend",    icon: "👑", name: "Legendary",     desc: "Grow a pet into a Legend",       coins: 50, test: s => s.stats.bestStage >= 5 },
 ];
 
@@ -401,10 +404,12 @@ function render() {
   $("coins").textContent = state.coins;
   $("streak").textContent = streak();
 
-  for (const t of ["home", "shop", "badges", "stats"]) $("tab-" + t).classList.toggle("hidden", session.tab !== t);
+  for (const t of ["home", "play", "shop", "badges", "stats"]) $("tab-" + t).classList.toggle("hidden", session.tab !== t);
   document.querySelectorAll(".tabbar button").forEach(b => b.classList.toggle("active", b.dataset.tab === session.tab));
 
+  if (session.tab !== "play") Arcade.pause();
   if (session.tab === "home") renderHome();
+  if (session.tab === "play") Arcade.show();
   if (session.tab === "shop") renderShop();
   if (session.tab === "badges") renderBadges();
   if (session.tab === "stats") renderStats();

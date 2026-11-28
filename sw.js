@@ -1,6 +1,6 @@
 // Lets the app open offline once it has been visited.
-const CACHE = "habitpet-v2";
-const FILES = ["./", "index.html", "style.css", "pet.js", "app.js", "manifest.json", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png"];
+const CACHE = "habitpet-v3";
+const FILES = ["./", "index.html", "style.css", "pet.js", "arcade.js", "app.js", "manifest.json", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));

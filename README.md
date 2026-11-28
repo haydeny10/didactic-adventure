@@ -25,6 +25,7 @@ A habit tracker where your habits keep a little pet alive.
 - 🚨 **Rescue mission**: if health drops below 25, finish every habit that day to jump back to 60.
 
 ### Fun stuff
+- 🚀 **Pet Patrol**: a mini space shooter on the Play tab. Your pet shoots down waves of bad habits (📱🍩🛋️). Healthier pets get more lives (3 / 2 / 1). Clearing a wave pays 1 🪙, up to 10 a day.
 - 👒 **Outfits**: 8 hats and accessories. Better ones unlock as your pets grow up.
 - 🛋️ **Room**: buy furniture and wallpaper to decorate your pet's room.
 - 🏆 **17 badges**, each with a coin reward.
